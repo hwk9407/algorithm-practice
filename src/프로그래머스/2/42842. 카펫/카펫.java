@@ -4,9 +4,11 @@ class Solution {
         int sum = brown + yellow;
         for (int x = sum / 3; x >= 3; x--) {
             if (sum % x == 0) {
-                if ((x - 2) * (sum / x - 2) != yellow) continue;
+                int y = sum / x;
+                if (y > x) return new int[]{-1, -1};
+                if ((x - 2) * (y - 2) != yellow) continue;
                 answer[0] = x;
-                answer[1] = sum / x;
+                answer[1] = y;
                 break;
             }
         }
