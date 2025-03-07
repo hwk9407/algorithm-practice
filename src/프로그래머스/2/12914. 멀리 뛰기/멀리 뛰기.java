@@ -1,16 +1,13 @@
 class Solution {
-    private static int[] arr = new int[2001];
     public long solution(int n) {
+        long[] dp = new long[2001];
         
-        long answer = jump(n);
-        return answer;
-    }
-    
-    private int jump(int num) {
-        if (num <= 2) return num;
-        if (arr[num] == 0) {
-            arr[num] = (jump(num - 2) + jump(num - 1)) % 1234567;
+        dp[1] = 1;
+        dp[2] = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            dp[i] = (dp[i - 2] + dp[i - 1]) % 1234567;
         }
-        return arr[num];
+        return dp[n];
     }
 }
