@@ -2,27 +2,23 @@ import java.util.*;
 
 class Solution {
     public int solution(int cacheSize, String[] cities) {
-        LinkedHashSet<String> set = new LinkedHashSet<>(cacheSize);
+        LinkedHashMap<String, Integer> cache = new LinkedHashMap<>(32, 0.75f, true);
         int answer = 0;
         
         for (String city : cities) {
             city = city.toLowerCase();
             
-            if (set.contains(city)) {
+            if (cache.containsKey(city)) {
                 answer++;
             } else {
                 answer += 5;
             }
             
-            boolean flag = set.add(city);
-            if (set.size() > cacheSize) {
-                Iterator<String> it = set.iterator();
+            cache.put(city, 1);
+            if (cache.size() > cacheSize) {
+                Iterator<String> it = cache.keySet().iterator();
                 it.next();
                 it.remove();
-            }
-            if (!flag) {
-                set.remove(city);
-                set.add(city);
             }
         }
         
