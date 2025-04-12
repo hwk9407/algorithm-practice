@@ -37,7 +37,7 @@ class Solution {
         @Override
         public int compareTo(File o) {
             if (!this.head.equals(o.head)) return this.head.compareTo(o.head);
-            if (this.number != o.number) return this.number > o.number ? 1 : -1;
+            if (this.number != o.number) return Integer.compare(this.number, o.number);
             return this.index > o.index ? 1 : -1;
         }
     }
