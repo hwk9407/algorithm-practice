@@ -1,0 +1,22 @@
+WITH SUM_SCORE AS (
+    SELECT SUM(gr.SCORE) AS SCORE
+        , gr.EMP_NO
+        , em.EMP_NAME
+        , em.POSITION
+        , em.EMAIL
+    FROM HR_DEPARTMENT dp
+        LEFT JOIN HR_EMPLOYEES em ON dp.DEPT_ID = em.DEPT_ID
+        LEFT JOIN HR_GRADE gr ON em.EMP_NO = gr.EMP_NO
+    WHERE gr.YEAR = 2022
+    GROUP BY 2, 3, 4, 5
+)
+SELECT SCORE
+    , EMP_NO
+    , EMP_NAME
+    , POSITION
+    , EMAIL
+FROM SUM_SCORE
+WHERE SCORE = (
+    SELECT MAX(SCORE)
+    FROM SUM_SCORE
+);
