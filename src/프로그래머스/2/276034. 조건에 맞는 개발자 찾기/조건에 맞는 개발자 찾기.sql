@@ -1,0 +1,11 @@
+SELECT d.ID
+    , d.EMAIL
+    , d.FIRST_NAME
+    , d.LAST_NAME
+FROM DEVELOPERS d
+    INNER JOIN SKILLCODES s
+    ON s.CODE & d.SKILL_CODE
+WHERE s.NAME = 'C#'
+    OR s.NAME = 'Python'
+GROUP BY 1, 2, 3, 4
+ORDER BY 1 ASC
