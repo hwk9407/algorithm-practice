@@ -3,15 +3,15 @@ class Solution {
         int gcdA = arrayGcd(arrayA);
         int gcdB = arrayGcd(arrayB);
         int answer = 0;
-        for (int i = 2; i < (int) Math.sqrt(gcdA); i++) {
+        for (int i = 2; i <= (int) Math.sqrt(gcdA); i++) {
             if (gcdA % i != 0) continue;
             if (isValid(i, arrayB)) answer = Math.max(answer, i);
-            if (isValid(gcdB / i, arrayB)) answer = Math.max(answer, gcdA / i);
+            if (i != gcdA / i && isValid(gcdA / i, arrayB)) answer = Math.max(answer, gcdA / i);
         }
-        for (int i = 2; i < (int) Math.sqrt(gcdB); i++) {
+        for (int i = 2; i <= (int) Math.sqrt(gcdB); i++) {
             if (gcdB % i != 0) continue;
             if (isValid(i, arrayA)) answer = Math.max(answer, i);
-            if (isValid(gcdB / i, arrayA)) answer = Math.max(answer, gcdB / i);
+            if (i != gcdB / i && isValid(gcdB / i, arrayA)) answer = Math.max(answer, gcdB / i);
         }
         if (isValid(gcdB, arrayA)) answer = Math.max(answer, gcdB);
         if (isValid(gcdA, arrayB)) answer = Math.max(answer, gcdA);
