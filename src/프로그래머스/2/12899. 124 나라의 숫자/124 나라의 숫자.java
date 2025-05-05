@@ -8,7 +8,7 @@ class Solution {
                 sb.insert(0, "4");
                 n = n / 3 - 1;
             } else {
-                sb.insert(0, Integer.toString(rest));
+                sb.insert(0, rest);
                 n /= 3;
             }
         }
