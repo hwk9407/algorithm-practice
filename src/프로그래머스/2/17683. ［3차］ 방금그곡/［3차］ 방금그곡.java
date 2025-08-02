@@ -1,60 +1,78 @@
 import java.util.*;
 
 class Solution {
+    private static class Music {
+        String title;
+        int duration;
+        List<String> melody;
+        
+        Music(String title, int duration, List<String> melody) {
+            this.title = title;
+            this.duration = duration;
+            this.melody = melody;
+        }
+    }
+
     public String solution(String m, String[] musicinfos) {
         List<String> heard = parseNotes(m);
-        String answer = "(None)";
-        int maxTime = -1;
+        List<Music> matchMusic = new ArrayList<>();
+        
         for (String info : musicinfos) {
             String[] parts = info.split(",");
-            List<String> music = parseNotes(parts[3]);
-            int duration = getTime(parts[0], parts[1]);
-            
-            List<String> played = new ArrayList<>();
+            int duration = toMinutes(parts[1]) - toMinutes(parts[0]);
+            String title = parts[2];
+            List<String> original = parseNotes(parts[3]);
+            List<String> melody = new ArrayList<>();
+
             for (int i = 0; i < duration; i++) {
-                played.add(music.get(i % music.size()));
+                melody.add(original.get(i % original.size()));
             }
 
-            boolean found = false;
-            for (int i = 0; i <= played.size() - heard.size(); i++) {
-                boolean matched = true;
-                for (int j = 0; j < heard.size(); j++) {
-                    if (!played.get(i + j).equals(heard.get(j))) {
-                        matched = false;
-                        break;
-                    }
-                }
-                if (matched) {
-                    found = true;
-                    break;
-                }
+            if (isMatch(melody, heard)) {
+                matchMusic.add(new Music(title, duration, melody));
             }
-            if (found && duration > maxTime) {
-                answer = parts[2];
-                maxTime = duration;
+        }
+        
+        String answer = "(None)";
+        int maxDuration = -1;
+        for (Music music : matchMusic) {
+            if (music.duration > maxDuration) {
+                maxDuration = music.duration;
+                answer = music.title;
             }
         }
         return answer;
     }
 
-    private List<String> parseNotes(String melody) {
-        List<String> notes = new ArrayList<>();
-        for (int i = 0; i < melody.length(); i++) {
-            if (i + 1 < melody.length() && melody.charAt(i + 1) == '#') {
-                notes.add(melody.charAt(i) + "#");
+    private List<String> parseNotes(String melodies) {
+        List<String> melody = new ArrayList<>();
+        for (int i = 0; i < melodies.length(); i++) {
+            if (i + 1 < melodies.length() && melodies.charAt(i + 1) == '#') {
+                melody.add(melodies.charAt(i) + "#");
                 i++;
             } else {
-                notes.add("" + melody.charAt(i));
+                melody.add(melodies.charAt(i) + "");
             }
         }
-        return notes;
+        return melody;
     }
 
-    private int getTime(String start, String end) {
-        String[] startTime = start.split(":");
-        String[] endTime = end.split(":");
-        int time = Integer.parseInt(endTime[0]) * 60 + Integer.parseInt(endTime[1]);
-        time -= Integer.parseInt(startTime[0]) * 60 + Integer.parseInt(startTime[1]);
-        return time;
+    private int toMinutes(String time) {
+        String[] split = time.split(":");
+        return (Integer.parseInt(split[0]) * 60) + Integer.parseInt(split[1]);
+    }
+    
+    private boolean isMatch(List<String> melody, List<String> heard) {
+        for (int i = 0; i <= melody.size() - heard.size(); i++) {
+            boolean isEqual = true;
+            for (int j = 0; j < heard.size(); j++) {
+                if (!melody.get(i + j).equals(heard.get(j))) {
+                    isEqual = false;
+                    break;
+                }
+            }
+            if (isEqual) return true;
+        }
+        return false;
     }
 }
