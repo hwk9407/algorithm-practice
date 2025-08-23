@@ -1,60 +1,72 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
-    static boolean[] visited;
-    static StringBuilder sb = new StringBuilder();
-    
-    public static void main (String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int v = sc.nextInt();
-        
-        visited = new boolean[n + 1];
-        for (int i = 0; i <= n; i++) graph.add(new ArrayList<>());
+    private static List<List<Integer>> graph = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] line = br.readLine().split(" ");
+
+        int n = Integer.parseInt(line[0]);
+        int m = Integer.parseInt(line[1]);
+        int v = Integer.parseInt(line[2]);
+
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
         for (int i = 0; i < m; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
+            line = br.readLine().split(" ");
+            int a = Integer.parseInt(line[0]);
+            int b = Integer.parseInt(line[1]);
             graph.get(a).add(b);
             graph.get(b).add(a);
         }
-        for (int i = 0; i <= n; i++) graph.get(i).sort(Comparator.naturalOrder());
-        dfs(v);
-        System.out.println(sb.toString());
-        
-        sb.setLength(0);
-        Arrays.fill(visited, false);
-        
-        bfs(v);
-        System.out.println(sb.toString());
-    };
-    
-    public static void dfs(int node) {
-        visited[node] = true;
-        if (sb.length() != 0) sb.append(" ");
-        sb.append(node);
-        for (int next : graph.get(node)) {
-            if (!visited[next]) dfs(next);
+        for (List<Integer> list : graph) {
+            list.sort(Comparator.naturalOrder());
         }
+        dfs(v, n);
+        bfs(v, n);
     }
-    
-    public static void bfs(int node) {
+
+    private static void dfs(int startNode, int n) {
+        StringBuilder sb = new StringBuilder();
+        boolean[] isVisited = new boolean[n + 1];
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.offerLast(startNode);
+        while (!stack.isEmpty()) {
+            int node = stack.pollLast();
+
+            if (isVisited[node]) continue;
+            isVisited[node] = true;
+            sb.append(node).append(" ");
+
+            List<Integer> nextGraph = graph.get(node);
+            for (int i = nextGraph.size() - 1; i >= 0; i--) {
+                int next = nextGraph.get(i);
+                if (!isVisited[next]) stack.offerLast(next);
+            }
+        }
+        sb.setLength(sb.length() - 1);
+        System.out.println(sb);
+    }
+    private static void bfs(int startNode, int n) {
+        StringBuilder sb = new StringBuilder();
+        boolean[] isVisited = new boolean[n + 1];
         Deque<Integer> queue = new ArrayDeque<>();
-        queue.offer(node);
-        visited[node] = true;
-        
-        while(!queue.isEmpty()) {
-            int current = queue.pollFirst();
-            if (sb.length() != 0) sb.append(" ");
-            sb.append(current);
-            
-            for (int next : graph.get(current)) {
-                if (!visited[next]) {
+        queue.offerLast(startNode);
+        isVisited[startNode] = true;
+        while (!queue.isEmpty()) {
+            int node = queue.pollFirst();
+            sb.append(node).append(" ");
+            for (int next : graph.get(node)) {
+                if (!isVisited[next]) {
+                    isVisited[next] = true;
                     queue.offerLast(next);
-                    visited[next] = true;
                 }
             }
         }
+        sb.setLength(sb.length() - 1);
+        System.out.println(sb);
     }
 }
