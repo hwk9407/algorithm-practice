@@ -13,20 +13,22 @@ public class Main {
             lanSize[i] = Integer.parseInt(br.readLine());
             max = Math.max(max, lanSize[i]);
         }
+        long result = 0;
         long left = 1;
         long right = (long) max + 1;
         while (left < right) {
-            long mid = (left + right) / 2;
-            long cnt = 0;
+            long mid = left + (right - left) / 2;
+            long sumCount = 0;
             for (int i = 0; i < k; i++) {
-                cnt += lanSize[i] / mid;
+                sumCount += lanSize[i] / mid;
             }
-            if (cnt < n) {
+            if (sumCount < n) {
                 right = mid;
                 continue;
             }
             left = mid + 1;
+            result = mid;
         }
-        System.out.println(left - 1);
+        System.out.println(result);
     }
 }
