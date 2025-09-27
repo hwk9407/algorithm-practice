@@ -2,50 +2,30 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    private static class State {
-        int depth;
-        int next;
-
-        State(int depth, int next) {
-            this.depth = depth;
-            this.next = next;
-        }
-    }
+    private static StringBuilder sb;
+    private static int N, M;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        int[] path = new int[M];
-        StringBuilder sb = new StringBuilder();
-        Deque<State> stack = new ArrayDeque<>();
-        stack.offerLast(new State(0, 1));
-
-        while (!stack.isEmpty()) {
-            State f = stack.peekLast();
-
-            if (f.depth == M) {
-                for (int x : path) sb.append(x).append(' ');
-                sb.append('\n');
-
-                stack.pollLast();
-                if (!stack.isEmpty()) stack.peekLast().next++;
-                continue;
-            }
-
-            int maxStart = N - (M - f.depth) + 1;
-            if (f.next > maxStart) {
-                stack.pollLast();
-                if (!stack.isEmpty()) stack.peekLast().next++;
-                continue;
-            }
-
-            path[f.depth] = f.next;
-            stack.offerLast(new State(f.depth + 1, f.next + 1));
-        }
-
+        sb = new StringBuilder();
+        dfs(0, 1, new int[M]);
         System.out.print(sb);
+    }
+
+    private static void dfs(int depth, int start, int[] arr) {
+        if (depth == M) {
+            for (int x : arr) sb.append(x).append(' ');
+            sb.setLength(sb.length() - 1);
+            sb.append('\n');
+            return;
+        }
+        for (int i = start; i <= N; i++) {
+            arr[depth] = i;
+            dfs(depth + 1, i + 1, arr);
+        }
     }
 }
