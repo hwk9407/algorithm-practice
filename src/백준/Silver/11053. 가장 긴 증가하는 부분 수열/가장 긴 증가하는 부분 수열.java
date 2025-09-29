@@ -12,15 +12,28 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int[] dp = new int[n];
-        Arrays.fill(dp, 1);
-        int answer = 1;
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (arr[i] > arr[j]) dp[i] = Math.max(dp[i], dp[j] + 1);
+        int[] tails = new int[n];
+        int len = 0;
+        for (int x : arr) {
+            if (len == 0 || tails[len - 1] < x) {
+                tails[len++] = x;
+                continue;
             }
-            answer = Math.max(dp[i], answer);
+            int idx = lowerBound(tails, 0, len, x);
+            tails[idx] = x;
         }
-        System.out.println(answer);
+        System.out.println(len);
+    }
+
+    private static int lowerBound(int[] arr, int left, int right, int x) {
+         while (left < right) {
+             int mid = (left + right) / 2;
+             if (arr[mid] < x) {
+                 left = mid + 1;
+             } else {
+                 right = mid;
+             }
+         }
+         return left;
     }
 }
