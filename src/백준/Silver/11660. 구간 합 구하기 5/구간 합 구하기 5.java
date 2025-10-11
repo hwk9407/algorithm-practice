@@ -15,8 +15,8 @@ public class Main {
                 arr[i][j] = arr[i - 1][j] + arr[i][j - 1] + Integer.parseInt(st.nextToken()) - arr[i - 1][j - 1];
             }
         }
-
-
+        
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int y1 = Integer.parseInt(st.nextToken());
@@ -24,7 +24,8 @@ public class Main {
             int y2 = Integer.parseInt(st.nextToken());
             int x2 = Integer.parseInt(st.nextToken());
             long result = arr[y2][x2] - arr[y1 - 1][x2] - arr[y2][x1 - 1] + arr[y1 - 1][x1 - 1];
-            System.out.println(result);
+            sb.append(result).append('\n');
         }
+        System.out.print(sb);
     }
 }
