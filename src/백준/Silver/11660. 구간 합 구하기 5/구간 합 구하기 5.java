@@ -8,39 +8,23 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
 
-        int[][] arr = new int[n][n];
-        int acc = 0;
-        for (int i = 0; i < n; i++) {
+        long[][] arr = new long[n + 1][n + 1];
+        for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                acc += Integer.parseInt(st.nextToken());
-                arr[i][j] = acc;
+            for (int j = 1; j <= n; j++) {
+                arr[i][j] = arr[i - 1][j] + arr[i][j - 1] + Integer.parseInt(st.nextToken()) - arr[i - 1][j - 1];
             }
         }
+
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int y1 = Integer.parseInt(st.nextToken()) - 1;
-            int x1 = Integer.parseInt(st.nextToken()) - 1;
-            int y2 = Integer.parseInt(st.nextToken()) - 1;
-            int x2 = Integer.parseInt(st.nextToken()) - 1;
-
-            int sum = 0;
-            for (int j = y1; j <= y2; j++) {
-                sum += arr[j][x2] - beforeValue(arr, x1, j);
-            }
-            System.out.println(sum);
+            int y1 = Integer.parseInt(st.nextToken());
+            int x1 = Integer.parseInt(st.nextToken());
+            int y2 = Integer.parseInt(st.nextToken());
+            int x2 = Integer.parseInt(st.nextToken());
+            long result = arr[y2][x2] - arr[y1 - 1][x2] - arr[y2][x1 - 1] + arr[y1 - 1][x1 - 1];
+            System.out.println(result);
         }
-
-    }
-
-    private static int beforeValue(int[][] arr, int x, int y) {
-        x--;
-        if (x < 0) {
-            x = arr[0].length - 1;
-            y--;
-            if (y < 0) return 0;
-        }
-        return arr[y][x];
     }
 }
