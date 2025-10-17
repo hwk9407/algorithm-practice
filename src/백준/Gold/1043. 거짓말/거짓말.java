@@ -13,20 +13,22 @@ public class Main {
         int[] truePerson = new int[p];
         for (int i = 0; i < p; i++) truePerson[i] = Integer.parseInt(st.nextToken());
 
-        List<Set<Integer>> person = new ArrayList<>();
-        for (int i = 0; i <= n; i++) person.add(new HashSet<>());
+        List<List<Integer>> person = new ArrayList<>();
+        for (int i = 0; i <= n; i++) person.add(new ArrayList<>());
 
         List<List<Integer>> party = new ArrayList<>();
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int q = Integer.parseInt(st.nextToken());
             party.add(new ArrayList<>());
-            for (int j = 0; j < q; j++) party.get(i).add(Integer.parseInt(st.nextToken()));
             for (int j = 0; j < q; j++) {
-                for (int k = 0; k < q; k++) {
-                    if (party.get(i).get(j).equals(party.get(i).get(k))) continue;
-                    person.get(party.get(i).get(j)).add(party.get(i).get(k));
-                }
+                party.get(i).add(Integer.parseInt(st.nextToken()));
+            }
+            int first = party.get(i).get(0);
+            for (int j = 1; j < q; j++) {
+                int next = party.get(i).get(j);
+                person.get(first).add(next);
+                person.get(next).add(first);
             }
         }
 
