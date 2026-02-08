@@ -22,12 +22,14 @@ class Solution {
         q.offer(root);
         while (!q.isEmpty()) {
             int size = q.size();
+            TreeNode lastNode = null;
             for (int i = 0; i < size; i++) {
-                TreeNode current = q.poll();
-                if (current.left != null) q.offer(current.left);
-                if (current.right != null) q.offer(current.right);
-                if (i == size - 1) result.add(current.val);
+                lastNode = q.poll();
+                if (lastNode.left != null) q.offer(lastNode.left);
+                if (lastNode.right != null) q.offer(lastNode.right);
             }
+            if (lastNode == null) continue;
+            result.add(lastNode.val);
         }
 
         return result;
